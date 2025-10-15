@@ -75,6 +75,17 @@ export default function TabsContainer() {
         }}
       />
 
+      {/* ⏱️ Timer */}
+      <Tabs.Screen
+        name="timer"
+        options={{
+          title: 'Timer',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? 'stopwatch' : 'stopwatch-outline'} size={theme.sizes.iconSize} color={color} />
+          ),
+        }}
+      />
+
       {/* 🏆 Ranking */}
       <Tabs.Screen
         name="ranking"

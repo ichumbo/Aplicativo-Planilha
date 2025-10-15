@@ -14,7 +14,7 @@ import {
   View,
 } from 'react-native';
 
-const exercises = [
+const initialExercises = [
   {
     id: 1,
     name: 'Deadlift',
@@ -87,11 +87,57 @@ const exercises = [
     explanation: 'Movimento balístico que trabalha cadeia posterior, core e desenvolve potência. Excelente para condicionamento.',
     videoUrl: 'https://www.youtube.com/watch?v=GYHbu2LRqD0',
   },
+  {
+    id: 9,
+    name: 'Rowing Machine',
+    category: 'Endurance',
+    icon: 'timer-outline',
+    description: 'Remo ergômetro',
+    explanation: 'Exercício cardiovascular completo que trabalha todo o corpo. Desenvolve resistência e força muscular.',
+    videoUrl: 'https://www.youtube.com/watch?v=zQ82RYIFLN8',
+  },
+  {
+    id: 10,
+    name: 'Bike Intervals',
+    category: 'Endurance',
+    icon: 'bicycle-outline',
+    description: 'Intervalos na bike',
+    explanation: 'Treino intervalado de alta intensidade na bicicleta ergométrica. Melhora capacidade cardiovascular.',
+    videoUrl: 'https://www.youtube.com/watch?v=1VYlOKUdylM',
+  },
+  {
+    id: 11,
+    name: 'Running',
+    category: 'Endurance',
+    icon: 'walk-outline',
+    description: 'Corrida contínua',
+    explanation: 'Exercício aeróbico fundamental. Desenvolve resistência cardiovascular e fortalece membros inferiores.',
+    videoUrl: 'https://www.youtube.com/watch?v=kVnyY17VS9Y',
+  },
+  {
+    id: 12,
+    name: 'Swimming',
+    category: 'Endurance',
+    icon: 'water-outline',
+    description: 'Natação',
+    explanation: 'Exercício completo de baixo impacto. Trabalha todo o corpo e desenvolve excelente capacidade cardiorrespiratória.',
+    videoUrl: 'https://www.youtube.com/watch?v=5HLW2AI1Ink',
+  },
+  {
+    id: 13,
+    name: 'Elliptical',
+    category: 'Endurance',
+    icon: 'ellipse-outline',
+    description: 'Elíptico',
+    explanation: 'Exercício cardiovascular de baixo impacto. Combina movimentos de corrida e esqui cross-country.',
+    videoUrl: 'https://www.youtube.com/watch?v=TKE6zKk6e8g',
+  },
 ];
 
-const recentExercises = [1, 3, 5, 2]; // IDs dos exercícios usados recentemente
+const recentExercises = [1, 3, 9, 11]; // IDs dos exercícios usados recentemente
 
 export default function ExercisesScreen() {
+  const [exercises, setExercises] = useState(initialExercises);
   const [searchText, setSearchText] = useState('');
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -108,6 +154,33 @@ export default function ExercisesScreen() {
   });
   const [showDropdown1, setShowDropdown1] = useState(false);
   const [showDropdown2, setShowDropdown2] = useState(false);
+
+  const createExercise = () => {
+    if (!newExercise.name.trim()) return;
+    
+    const exercise = {
+      id: Math.max(...exercises.map(e => e.id)) + 1,
+      name: newExercise.name,
+      category: newExercise.category || 'Personalizado',
+      icon: newExercise.icon,
+      description: newExercise.description,
+      explanation: newExercise.explanation,
+      videoUrl: newExercise.videoUrl,
+    };
+    
+    setExercises([...exercises, exercise]);
+    setNewExercise({
+      name: '',
+      category: '',
+      description: '',
+      explanation: '',
+      videoUrl: '',
+      icon: 'fitness-outline',
+      trackType1: 'repetições',
+      trackType2: 'peso'
+    });
+    setShowCreateModal(false);
+  };
 
   const trackOptions = ['repetições', 'tempo', 'segundos', 'milhas', 'peso', 'distância'];
 
@@ -173,26 +246,33 @@ export default function ExercisesScreen() {
               <TouchableOpacity
                 key={exercise.id}
                 style={styles.exerciseCard}
-                onPress={() => router.push('/movement-details')}
+                onPress={() => router.push({
+                  pathname: '/training',
+                  params: { 
+                    addExercise: JSON.stringify(exercise),
+                    section: exercise.category === 'Endurance' ? 'endurance' : 'elite'
+                  }
+                })}
               >
-                <View style={styles.exerciseIcon}>
-                  <Ionicons name={exercise.icon as any} size={24} color="#fab12f" />
+                <View style={[styles.exerciseIcon, exercise.category === 'Endurance' && styles.exerciseIconOrange]}>
+                  <Ionicons name={exercise.icon as any} size={24} color={exercise.category === 'Endurance' ? "#ff6b35" : "#fab12f"} />
                 </View>
                 <View style={styles.exerciseInfo}>
                   <Text style={styles.exerciseName}>{exercise.name}</Text>
                   <Text style={styles.exerciseDescription}>{exercise.description}</Text>
                 </View>
-                <View style={styles.exerciseCategory}>
-                  <Text style={styles.categoryText}>{exercise.category}</Text>
+                <View style={[styles.exerciseCategory, exercise.category === 'Endurance' && styles.exerciseCategoryOrange]}>
+                  <Text style={[styles.categoryText, exercise.category === 'Endurance' && styles.categoryTextOrange]}>{exercise.category}</Text>
                 </View>
                 <TouchableOpacity 
                   style={styles.infoButton}
-                  onPress={() => {
+                  onPress={(e) => {
+                    e.stopPropagation();
                     setSelectedExercise(exercise);
                     setShowModal(true);
                   }}
                 >
-                  <Ionicons name="information-circle-outline" size={20} color="#fab12f" />
+                  <Ionicons name="information-circle-outline" size={20} color={exercise.category === 'Endurance' ? "#ff6b35" : "#fab12f"} />
                 </TouchableOpacity>
               </TouchableOpacity>
             ))}
@@ -205,26 +285,33 @@ export default function ExercisesScreen() {
           <TouchableOpacity
             key={exercise.id}
             style={styles.exerciseCard}
-            onPress={() => router.push('/movement-details')}
+            onPress={() => router.push({
+              pathname: '/training',
+              params: { 
+                addExercise: JSON.stringify(exercise),
+                section: exercise.category === 'Endurance' ? 'endurance' : 'elite'
+              }
+            })}
           >
-            <View style={styles.exerciseIcon}>
-              <Ionicons name={exercise.icon as any} size={24} color="#fab12f" />
+            <View style={[styles.exerciseIcon, exercise.category === 'Endurance' && styles.exerciseIconOrange]}>
+              <Ionicons name={exercise.icon as any} size={24} color={exercise.category === 'Endurance' ? "#ff6b35" : "#fab12f"} />
             </View>
             <View style={styles.exerciseInfo}>
               <Text style={styles.exerciseName}>{exercise.name}</Text>
               <Text style={styles.exerciseDescription}>{exercise.description}</Text>
             </View>
-            <View style={styles.exerciseCategory}>
-              <Text style={styles.categoryText}>{exercise.category}</Text>
+            <View style={[styles.exerciseCategory, exercise.category === 'Endurance' && styles.exerciseCategoryOrange]}>
+              <Text style={[styles.categoryText, exercise.category === 'Endurance' && styles.categoryTextOrange]}>{exercise.category}</Text>
             </View>
             <TouchableOpacity 
               style={styles.infoButton}
-              onPress={() => {
+              onPress={(e) => {
+                e.stopPropagation();
                 setSelectedExercise(exercise);
                 setShowModal(true);
               }}
             >
-              <Ionicons name="information-circle-outline" size={20} color="#fab12f" />
+              <Ionicons name="information-circle-outline" size={20} color={exercise.category === 'Endurance' ? "#ff6b35" : "#fab12f"} />
             </TouchableOpacity>
           </TouchableOpacity>
         ))}
@@ -465,7 +552,10 @@ export default function ExercisesScreen() {
                 >
                   <Text style={styles.createCancelButtonText}>Cancelar</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.createSaveButton}>
+                <TouchableOpacity 
+                  style={styles.createSaveButton}
+                  onPress={createExercise}
+                >
                   <Text style={styles.createSaveButtonText}>Criar Exercício</Text>
                 </TouchableOpacity>
               </View>
@@ -938,5 +1028,14 @@ const styles = StyleSheet.create({
   dropdownItemText: {
     color: '#ccc',
     fontSize: 14,
+  },
+  exerciseIconOrange: {
+    backgroundColor: 'rgba(255, 107, 53, 0.1)',
+  },
+  exerciseCategoryOrange: {
+    backgroundColor: 'rgba(255, 107, 53, 0.2)',
+  },
+  categoryTextOrange: {
+    color: '#ff6b35',
   },
 });

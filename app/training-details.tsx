@@ -297,11 +297,6 @@ export default function ExerciseDetailScreen() {
           <Text style={styles.footerText}>Back</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.footerCenter}>
-          <Ionicons name="time-outline" size={28} color="#fff" />
-          <Text style={styles.footerCenterText}>Select Timer</Text>
-        </TouchableOpacity>
-
         <TouchableOpacity 
           style={[styles.footerBtn, currentExerciseIndex >= exercises.length - 1 && styles.disabledFooterBtn]} 
           onPress={goToNextExercise}
@@ -615,16 +610,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginHorizontal: 5,
   },
-  footerCenter: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderRadius: 20,
-    paddingVertical: 6,
-    paddingHorizontal: 14,
-  },
-  footerCenterText: {
-    color: "#fbbf24",
-    fontWeight: "bold",
-    marginLeft: 5,
-  },
+
 });

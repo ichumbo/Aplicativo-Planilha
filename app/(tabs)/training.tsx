@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
-import { useState } from "react";
+import { router, useLocalSearchParams } from "expo-router";
+import { useState, useEffect } from "react";
 import {
   Image,
   ScrollView,
@@ -13,6 +13,7 @@ import {
 import { Calendar } from "react-native-calendars";
 
 export default function TrainingScreen() {
+  const params = useLocalSearchParams();
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState("2024-09-26");
   const [completedExercises, setCompletedExercises] = useState<{
@@ -25,8 +26,23 @@ export default function TrainingScreen() {
     { id: 3, read: true },
     { id: 4, read: true }
   ]);
+  const [customExercises, setCustomExercises] = useState([]);
+  const [customEnduranceExercises, setCustomEnduranceExercises] = useState([]);
 
   const hasUnreadNotifications = notifications.some(n => !n.read);
+
+  useEffect(() => {
+    if (params.addExercise) {
+      const exercise = JSON.parse(params.addExercise as string);
+      const section = params.section as string;
+      
+      if (section === 'endurance') {
+        setCustomEnduranceExercises(prev => [...prev, exercise]);
+      } else {
+        setCustomExercises(prev => [...prev, exercise]);
+      }
+    }
+  }, [params.addExercise, params.section]);
 
   const getWorkoutForDay = (day: number) => {
     const workouts = {
@@ -334,7 +350,10 @@ export default function TrainingScreen() {
             <Ionicons name="ellipsis-horizontal" size={18} color="#fff" />
           </View>
 
-          <TouchableOpacity style={styles.sessionButton}>
+          <TouchableOpacity 
+            style={styles.sessionButton}
+            onPress={() => router.push("/training-details")}
+          >
             <Text style={styles.sessionText}>Começar Sessão</Text>
           </TouchableOpacity>
         </View>
@@ -472,6 +491,34 @@ export default function TrainingScreen() {
           </Text>
         </TouchableOpacity>
 
+        {customExercises.map((exercise, index) => (
+          <TouchableOpacity
+            key={`custom-${index}`}
+            style={styles.modalExerciseCard}
+            onPress={() => router.push("/training-details")}
+          >
+            <View style={styles.modalExerciseHeader}>
+              <Ionicons name={exercise.icon as any} size={20} color="#fab12f" />
+              <Text style={styles.modalExerciseTitle}>{exercise.name}</Text>
+            </View>
+            <TouchableOpacity
+              style={[
+                styles.exerciseCheckbox,
+                completedExercises[`custom-${index}`] && styles.exerciseCheckboxActive,
+              ]}
+              onPress={() => toggleExercise(`custom-${index}`)}
+            >
+              {completedExercises[`custom-${index}`] && (
+                <Ionicons name="checkmark" size={14} color="#000" />
+              )}
+            </TouchableOpacity>
+            <Text style={styles.modalExerciseDetails}>Personalizado</Text>
+            <Text style={styles.modalExerciseNotes}>
+              {exercise.description}
+            </Text>
+          </TouchableOpacity>
+        ))}
+
         <TouchableOpacity 
           style={styles.addExerciseButton}
           onPress={() => router.push("/exercises")}
@@ -497,7 +544,10 @@ export default function TrainingScreen() {
             <Ionicons name="ellipsis-horizontal" size={18} color="#fff" />
           </View>
 
-          <TouchableOpacity style={styles.sessionButtonOrange}>
+          <TouchableOpacity 
+            style={styles.sessionButtonOrange}
+            onPress={() => router.push("/training-details")}
+          >
             <Text style={styles.sessionTextOrange}>Começar Sessão</Text>
           </TouchableOpacity>
         </View>
@@ -587,6 +637,34 @@ export default function TrainingScreen() {
           </Text>
         </TouchableOpacity>
 
+        {customEnduranceExercises.map((exercise, index) => (
+          <TouchableOpacity
+            key={`endurance-${index}`}
+            style={styles.modalExerciseCard}
+            onPress={() => router.push("/training-details")}
+          >
+            <View style={styles.modalExerciseHeader}>
+              <Ionicons name={exercise.icon as any} size={20} color="#ff6b35" />
+              <Text style={styles.modalExerciseTitle}>{exercise.name}</Text>
+            </View>
+            <TouchableOpacity
+              style={[
+                styles.exerciseCheckboxOrange,
+                completedExercises[`endurance-${index}`] && styles.exerciseCheckboxActiveOrange,
+              ]}
+              onPress={() => toggleExercise(`endurance-${index}`)}
+            >
+              {completedExercises[`endurance-${index}`] && (
+                <Ionicons name="checkmark" size={14} color="#000" />
+              )}
+            </TouchableOpacity>
+            <Text style={[styles.modalExerciseDetails, { color: "#ff6b35" }]}>Personalizado</Text>
+            <Text style={styles.modalExerciseNotes}>
+              {exercise.description}
+            </Text>
+          </TouchableOpacity>
+        ))}
+
         <TouchableOpacity 
           style={styles.addExerciseButtonOrange}
           onPress={() => router.push("/exercises")}
@@ -595,11 +673,6 @@ export default function TrainingScreen() {
           <Text style={styles.addExerciseTextOrange}>Adicionar Exercício</Text>
         </TouchableOpacity>
       </ScrollView>
-
-      {/* BOTÃO FLUTUANTE */}
-      <TouchableOpacity style={styles.fab}>
-        <Ionicons name="add" size={30} color="#000" />
-      </TouchableOpacity>
     </View>
   );
 }
