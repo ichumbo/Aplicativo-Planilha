@@ -1,8 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useState } from "react";
-import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import { Image, Linking, Modal, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const movementDetails = {
   "1": {
@@ -134,6 +134,32 @@ export default function MovementDetailsScreen() {
   const movement = movementDetails[id as string];
   const [activeTab, setActiveTab] = useState("technique");
   const [isFavorite, setIsFavorite] = useState(false);
+  const [showStepModal, setShowStepModal] = useState(false);
+  const [selectedStep, setSelectedStep] = useState(null);
+  const [workoutStarted, setWorkoutStarted] = useState(false);
+  const [completedSteps, setCompletedSteps] = useState(new Set());
+
+  const handleStartWorkout = () => {
+    setWorkoutStarted(true);
+    const nextIncompleteStep = movement.technique.findIndex((_, index) => !completedSteps.has(index));
+    const stepIndex = nextIncompleteStep !== -1 ? nextIncompleteStep : 0;
+    setSelectedStep({ step: movement.technique[stepIndex], index: stepIndex, title: movement.title });
+    setShowStepModal(true);
+  };
+
+  const toggleStepCompletion = (stepIndex) => {
+    setCompletedSteps(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(stepIndex)) {
+        newSet.delete(stepIndex);
+      } else {
+        newSet.add(stepIndex);
+      }
+      return newSet;
+    });
+  };
+
+  const progressPercentage = movement ? (completedSteps.size / movement.technique.length) * 100 : 0;
 
   if (!movement) {
     return (
@@ -195,13 +221,13 @@ export default function MovementDetailsScreen() {
             <View style={styles.headerStats}>
               <View style={styles.statChip}>
                 <View style={styles.statIconBg}>
-                  <Ionicons name="time" size={16} color="#000" />
+                  <Ionicons name="time" size={16} color="#fff" />
                 </View>
                 <Text style={styles.statText}>{movement.duration}</Text>
               </View>
               <View style={styles.statChip}>
                 <View style={styles.statIconBg}>
-                  <Ionicons name="trophy" size={16} color="#000" />
+                  <Ionicons name="trophy" size={16} color="#fff" />
                 </View>
                 <Text style={styles.statText}>{movement.level}</Text>
               </View>
@@ -210,9 +236,9 @@ export default function MovementDetailsScreen() {
             {/* Indicador de progresso */}
             <View style={styles.progressIndicator}>
               <View style={styles.progressBar}>
-                <View style={styles.progressFill} />
+                <View style={[styles.progressFill, { width: `${progressPercentage}%` }]} />
               </View>
-              <Text style={styles.progressText}>Disponível</Text>
+              <Text style={styles.progressText}>{Math.round(progressPercentage)}% Concluído</Text>
             </View>
           </View>
         </View>
@@ -225,12 +251,24 @@ export default function MovementDetailsScreen() {
             </View>
             <Text style={styles.sectionTitle}>Demonstração Técnica</Text>
           </View>
-          <View style={styles.videoContainer}>
-            <Image source={{ uri: "https://img.youtube.com/vi/seivd3xz_pU/maxresdefault.jpg" }} style={styles.videoThumbnail} />
-            <TouchableOpacity style={styles.playButton}>
-              <Ionicons name="play" size={32} color="#000" />
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity 
+            style={styles.videoContainer}
+            onPress={() => movement?.video && Linking.openURL(movement.video)}
+          >
+            <Image 
+              source={{ uri: "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" }} 
+              style={styles.videoThumbnail} 
+              resizeMode="cover"
+            />
+            <View style={styles.videoOverlay}>
+              <View style={styles.playButton}>
+                <Ionicons name="play" size={32} color="#000" />
+              </View>
+            </View>
+            <View style={styles.youtubeIcon}>
+              <Ionicons name="logo-youtube" size={20} color="#ff0000" />
+            </View>
+          </TouchableOpacity>
         </View>
 
         {/* Descrição */}
@@ -295,14 +333,51 @@ export default function MovementDetailsScreen() {
           <View style={styles.tabContentCard}>
             {activeTab === "technique" && (
               <View style={styles.tabContent}>
-                {movement.technique.map((step, index) => (
-                  <View key={index} style={styles.stepItem}>
-                    <View style={styles.stepNumber}>
-                      <Text style={styles.stepNumberText}>{index + 1}</Text>
-                    </View>
-                    <Text style={styles.stepText}>{step}</Text>
+                <View style={styles.progressionHeader}>
+                  <View style={styles.progressionIconContainer}>
+                    <Ionicons name="trending-up" size={20} color="#fab12f" />
                   </View>
-                ))}
+                  <Text style={styles.progressionTitle}>Progressão do Movimento</Text>
+                </View>
+                {movement.technique.map((step, index) => {
+                  const isCompleted = completedSteps.has(index);
+                  return (
+                    <View key={index} style={[styles.progressionItem, isCompleted && styles.completedItem]}>
+                      <View style={styles.progressionContent}>
+                        <View style={styles.progressionContentHeader}>
+                          <View style={[styles.progressionStepIcon, isCompleted && styles.completedStepIcon]}>
+                            <Ionicons 
+                              name={isCompleted ? "checkmark" : (index === 0 ? "body-outline" : index === 1 ? "hand-left-outline" : index === 2 ? "fitness-outline" : index === 3 ? "arrow-up-outline" : "checkmark-outline")} 
+                              size={24} 
+                              color={isCompleted ? "#22c55e" : "#fab12f"} 
+                            />
+                          </View>
+                          <View style={styles.progressionContentText}>
+                            <Text style={[styles.progressionStepTitle, isCompleted && styles.completedStepTitle]}>Passo {index + 1}</Text>
+                            <Text style={[styles.progressionStepDescription, isCompleted && styles.completedStepDescription]}>{step}</Text>
+                          </View>
+                          <View style={styles.progressionActions}>
+                            <TouchableOpacity 
+                              style={[styles.checkButton, isCompleted && styles.checkedButton]}
+                              onPress={() => toggleStepCompletion(index)}
+                            >
+                              <Ionicons name={isCompleted ? "checkmark-circle" : "ellipse-outline"} size={20} color={isCompleted ? "#22c55e" : "#666"} />
+                            </TouchableOpacity>
+                            <TouchableOpacity 
+                              style={styles.progressionInfoButton}
+                              onPress={() => {
+                                setSelectedStep({ step, index, title: movement.title });
+                                setShowStepModal(true);
+                              }}
+                            >
+                              <Ionicons name="information-circle-outline" size={20} color="#fab12f" />
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  );
+                })}
               </View>
             )}
 
@@ -343,9 +418,9 @@ export default function MovementDetailsScreen() {
           <Text style={styles.footerText}>Voltar</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.footerCenter}>
+        <TouchableOpacity style={styles.footerCenter} onPress={handleStartWorkout}>
           <Ionicons name="play" size={24} color="#000" />
-          <Text style={styles.footerCenterText}>Iniciar Treino</Text>
+          <Text style={styles.footerCenterText}>{workoutStarted ? "Continuar Treino" : "Iniciar Treino"}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.footerBtn} onPress={() => setIsFavorite(!isFavorite)}>
@@ -353,6 +428,70 @@ export default function MovementDetailsScreen() {
           <Text style={styles.footerText}>Favorito</Text>
         </TouchableOpacity>
       </View>
+
+      <Modal
+        visible={showStepModal}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={() => setShowStepModal(false)}
+      >
+        <View style={styles.infoModalOverlay}>
+          <View style={styles.infoModalContent}>
+            <View style={styles.infoModalHeader}>
+              <View style={styles.infoModalTitleContainer}>
+                <View style={styles.infoModalIconContainer}>
+                  <Ionicons name="fitness-outline" size={24} color="#fab12f" />
+                </View>
+                <View>
+                  <Text style={styles.infoModalTitle}>Passo {selectedStep?.index + 1}</Text>
+                  <View style={styles.infoModalCategoryBadge}>
+                    <Text style={styles.infoModalCategoryText}>{selectedStep?.title}</Text>
+                  </View>
+                </View>
+              </View>
+              <TouchableOpacity 
+                style={styles.infoModalCloseButton}
+                onPress={() => setShowStepModal(false)}
+              >
+                <Ionicons name="close" size={20} color="#999" />
+              </TouchableOpacity>
+            </View>
+            
+            <ScrollView style={styles.infoModalBody} showsVerticalScrollIndicator={false}>
+              <TouchableOpacity 
+                style={styles.videoContainer}
+                onPress={() => movement?.video && Linking.openURL(movement.video)}
+              >
+                <Image 
+                  source={{ uri: "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" }} 
+                  style={styles.videoThumbnail} 
+                  resizeMode="cover"
+                />
+                <View style={styles.videoOverlay}>
+                  <View style={styles.playButtonContainer}>
+                    <Ionicons name="play" size={28} color="#000" />
+                  </View>
+                  <View style={styles.videoInfo}>
+                    <Text style={styles.videoText}>Assistir Técnica</Text>
+                    <Text style={styles.videoDuration}>Abrir no YouTube</Text>
+                  </View>
+                </View>
+                <View style={styles.youtubeIcon}>
+                  <Ionicons name="logo-youtube" size={20} color="#ff0000" />
+                </View>
+              </TouchableOpacity>
+              
+              <View style={styles.infoExplanationCard}>
+                <View style={styles.infoExplanationHeader}>
+                  <Ionicons name="information-circle" size={20} color="#fab12f" />
+                  <Text style={styles.infoModalSectionTitle}>Como Executar</Text>
+                </View>
+                <Text style={styles.infoModalExplanation}>{selectedStep?.step}</Text>
+              </View>
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -505,10 +644,6 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "900",
     marginBottom: 8,
-    textShadowColor: "rgba(0,0,0,0.9)",
-    textShadowOffset: { width: 0, height: 3 },
-    textShadowRadius: 6,
-    letterSpacing: -0.5,
   },
   titleUnderline: {
     width: 60,
@@ -532,21 +667,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
   },
   statIconBg: {
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: "rgba(0,0,0,0.2)",
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
     justifyContent: "center",
     alignItems: "center",
   },
   statText: {
-    color: "#000",
+    color: "#fff",
     fontSize: 13,
     fontWeight: "700",
   },
@@ -562,9 +693,9 @@ const styles = StyleSheet.create({
   },
   progressFill: {
     height: "100%",
-    width: "100%",
     backgroundColor: "#22c55e",
     borderRadius: 3,
+    minWidth: 6,
   },
   progressText: {
     color: "rgba(255,255,255,0.8)",
@@ -646,34 +777,127 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     flex: 1,
   },
-  stepItem: {
+  progressionHeader: {
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
-    backgroundColor: '#111',
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 8,
+    marginBottom: 20,
+    paddingBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "#222",
   },
-  stepNumber: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+  progressionIconContainer: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: "rgba(250, 177, 47, 0.15)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  progressionTitle: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "700",
+  },
+  progressionItem: {
+    position: "relative",
+    marginBottom: 5,
+  },
+  progressionStepContainer: {
+    position: "absolute",
+    left: 0,
+    top: 24,
+    zIndex: 1,
+  },
+  progressionStepNumber: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     backgroundColor: "#fab12f",
     justifyContent: "center",
     alignItems: "center",
   },
-  stepNumberText: {
+  progressionStepText: {
     color: "#000",
     fontSize: 12,
     fontWeight: "700",
   },
-  stepText: {
-    color: "#fff",
-    fontSize: 14,
-    lineHeight: 20,
+  progressionStepIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: "rgba(250, 177, 47, 0.1)",
+    borderWidth: 1,
+    borderColor: "rgba(250, 177, 47, 0.3)",
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+  },
+  progressionContent: {
+    backgroundColor: "#111",
+    borderRadius: 12,
+    padding: 16,
+    borderLeftWidth: 3,
+    borderLeftColor: "#fab12f",
+  },
+  progressionContentHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  progressionContentText: {
     flex: 1,
   },
+  progressionInfoButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "rgba(250, 177, 47, 0.1)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  progressionStepTitle: {
+    color: "#fab12f",
+    fontSize: 14,
+    fontWeight: "600",
+    marginBottom: 4,
+  },
+  progressionStepDescription: {
+    color: "#ccc",
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  completedItem: {
+    opacity: 0.8,
+  },
+  completedStepIcon: {
+    backgroundColor: "rgba(34, 197, 94, 0.1)",
+    borderColor: "rgba(34, 197, 94, 0.3)",
+  },
+  completedStepTitle: {
+    color: "#22c55e",
+    textDecorationLine: "line-through",
+  },
+  completedStepDescription: {
+    color: "#999",
+    textDecorationLine: "line-through",
+  },
+  progressionActions: {
+    flexDirection: "row",
+    gap: 12,
+  },
+  checkButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "rgba(102, 102, 102, 0.1)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  checkedButton: {
+    backgroundColor: "rgba(34, 197, 94, 0.1)",
+  },
+
   tipItem: {
     flexDirection: "row",
     alignItems: "flex-start",
@@ -693,7 +917,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#1a1a1a",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    paddingVertical: 20,
+    paddingVertical: 30,
     paddingHorizontal: 20,
   },
   footerBtn: {
@@ -709,7 +933,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#fab12f",
-    borderRadius: 15,
+    borderRadius: 10,
     paddingVertical: 12,
     paddingHorizontal: 20,
   },
@@ -739,11 +963,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#222",
   },
   playButton: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    marginTop: -35,
-    marginLeft: -35,
     width: 70,
     height: 70,
     borderRadius: 35,
@@ -876,5 +1095,133 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 16,
     marginBottom: 24,
+  },
+  // Info Modal Styles
+  infoModalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 15,
+  },
+  infoModalContent: {
+    backgroundColor: "#111",
+    borderRadius: 20,
+    width: '100%',
+    maxHeight: '85%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.5,
+    shadowRadius: 20,
+    elevation: 20,
+  },
+  infoModalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 24,
+    borderBottomWidth: 1,
+    borderBottomColor: '#222',
+  },
+  infoModalTitleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  infoModalIconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: 'rgba(250, 177, 47, 0.1)',
+    borderWidth: 1,
+    borderColor: '#fab12f',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  infoModalTitle: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  infoModalCategoryBadge: {
+    backgroundColor: 'rgba(250, 177, 47, 0.2)',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 6,
+    alignSelf: 'flex-start',
+  },
+  infoModalCategoryText: {
+    color: '#fab12f',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  infoModalCloseButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#222',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  infoModalBody: {
+    padding: 24,
+  },
+  infoExplanationCard: {
+    marginTop: 16,
+  },
+  infoExplanationHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 12,
+  },
+  infoModalSectionTitle: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  infoModalExplanation: {
+    color: '#ccc',
+    fontSize: 14,
+    lineHeight: 22,
+  },
+  playButtonContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#fab12f',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  videoInfo: {
+    alignItems: 'flex-start',
+  },
+  videoText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  videoDuration: {
+    color: '#ccc',
+    fontSize: 12,
+    opacity: 0.9,
+  },
+  youtubeIcon: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    width: 32,
+    height: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

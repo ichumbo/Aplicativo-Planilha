@@ -442,9 +442,6 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     fontFamily: 'monospace',
     letterSpacing: 3,
-    textShadowColor: 'rgba(250, 177, 47, 0.5)',
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 10,
   },
   timeDots: {
     flexDirection: 'row',

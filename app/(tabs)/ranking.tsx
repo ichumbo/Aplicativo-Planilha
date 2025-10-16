@@ -360,6 +360,16 @@ export default function RankingScreen() {
         })}
       </ScrollView>
 
+      {/* BEAUTIFUL SEPARATOR */}
+      <View style={styles.beautifulSeparator}>
+        <View style={styles.separatorDot} />
+        <View style={styles.separatorLine} />
+        <View style={styles.separatorCenter}>
+          <Ionicons name="trophy-outline" size={16} color="#fab12f" />
+        </View>
+        <View style={styles.separatorLine} />
+        <View style={styles.separatorDot} />
+      </View>
 
       <ScrollView 
         contentContainerStyle={{ paddingBottom: 100 }}
@@ -368,58 +378,71 @@ export default function RankingScreen() {
         {rankingData.map((item, index) => (
           <View key={item.id} style={[
             styles.rankingCard,
-            index < 3 && { borderWidth: 2, borderColor: getRankingColor(index + 1) }
+            index < 3 && { borderColor: getRankingColor(index + 1) }
           ]}>
-            <View style={styles.rankingPosition}>
+            {/* Position Badge */}
+            <View style={[
+              styles.positionBadge,
+              { backgroundColor: getRankingColor(index + 1) }
+            ]}>
               <Ionicons 
                 name={getRankingIcon(index + 1) as any}
-                size={24} 
-                color={getRankingColor(index + 1)} 
+                size={20} 
+                color={index < 3 ? "#000" : "#fff"} 
               />
               <Text style={[
-                styles.positionNumber,
-                { color: getRankingColor(index + 1) }
+                styles.positionText,
+                { color: index < 3 ? "#000" : "#fff" }
               ]}>
-                {index + 1}º
+                {index + 1}
               </Text>
             </View>
 
-            <Image 
-              source={{ uri: item.avatar }}
-              style={styles.userAvatar}
-            />
-
-            <View style={styles.rankingInfo}>
-              <View style={styles.userHeader}>
-                <View>
+            {/* Main Content */}
+            <View style={styles.cardContent}>
+              {/* User Info Row */}
+              <View style={styles.userRow}>
+                <Image 
+                  source={{ uri: item.avatar }}
+                  style={styles.userAvatar}
+                />
+                <View style={styles.userInfo}>
                   <Text style={styles.userName}>{item.user}</Text>
                   <Text style={styles.gymName}>{item.gym}</Text>
                 </View>
-                <Text style={[
-                  styles.totalScore,
-                  { 
-                    backgroundColor: index < 3 ? `${getRankingColor(index + 1)}44` : '#303030ff',
-                    color: index < 3 ? getRankingColor(index + 1) : '#fab12f'
-                  }
-                ]}>{item.totalScore} pts</Text>
               </View>
               
-              <View style={styles.statsGrid}>
-                <View style={styles.statBox}>
+              {/* Score Container */}
+              <View style={[
+                styles.scoreContainer,
+                { 
+                  backgroundColor: index < 3 ? `${getRankingColor(index + 1)}22` : '#1a1a1a',
+                  borderColor: getRankingColor(index + 1),
+                  borderWidth: 1
+                }
+              ]}>
+                <Text style={[
+                  styles.totalScore,
+                  { color: index < 3 ? getRankingColor(index + 1) : '#fab12f' }
+                ]}>{item.totalScore} <Text style={[styles.ptsLabel, { color: getRankingColor(index + 1) }]}>pts</Text></Text>
+              </View>
+              
+              {/* Stats Row */}
+              <View style={styles.statsRow}>
+                <View style={styles.statItem}>
+                  <Ionicons name="barbell-outline" size={16} color="#fab12f" />
                   <Text style={styles.statValue}>{item.weight}kg</Text>
-                  <Text style={styles.statLabel}>Peso</Text>
                 </View>
-                <View style={styles.statBox}>
+                <View style={styles.statItem}>
+                  <Ionicons name="time-outline" size={16} color="#fab12f" />
                   <Text style={styles.statValue}>{item.displayTime}</Text>
-                  <Text style={styles.statLabel}>Tempo</Text>
                 </View>
-                <View style={styles.statBox}>
+                <View style={styles.statItem}>
+                  <Ionicons name="repeat-outline" size={16} color="#fab12f" />
                   <Text style={styles.statValue}>{item.reps}</Text>
-                  <Text style={styles.statLabel}>Reps</Text>
                 </View>
               </View>
             </View>
-
           </View>
         ))}
       </ScrollView>
@@ -491,7 +514,32 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   weekScroll: {
-    marginBottom: 15,
+    marginBottom: 0,
+  },
+  beautifulSeparator: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 20,
+    paddingHorizontal: 10,
+  },
+  separatorDot: {
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: "#fab12f",
+  },
+  separatorLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: "#333",
+    marginHorizontal: 8,
+  },
+  separatorCenter: {
+    backgroundColor: "#1a1a1a",
+    borderRadius: 20,
+    padding: 8,
+    borderWidth: 1,
+    borderColor: "#fab12f",
   },
   dayColumn: {
     alignItems: "center",
@@ -514,75 +562,107 @@ const styles = StyleSheet.create({
     gap: 2,
     marginTop: 2,
   },
+  weekEliteDot: {
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: "#fab12f",
+  },
+  weekEnduranceDot: {
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: "#ff6b35",
+  },
   rankingCard: {
-    backgroundColor: "#111",
+    backgroundColor: "#1a1a1a",
     borderRadius: 16,
-    padding: 10,
     marginBottom: 12,
+    borderWidth: 2,
+    borderColor: "#333",
+    overflow: "hidden",
+  },
+  positionBadge: {
+    position: "absolute",
+    top: 0,
+    right: 0,
     flexDirection: "row",
     alignItems: "center",
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderBottomLeftRadius: 16,
+    gap: 4,
   },
-  rankingPosition: {
-    alignItems: "center",
-    marginRight: 16,
-    minWidth: 40,
-  },
-  positionNumber: {
-    fontSize: 12,
+  positionText: {
+    fontSize: 14,
     fontWeight: "bold",
-    marginTop: 4,
+  },
+  cardContent: {
+    padding: 12,
+    paddingTop: 16,
+  },
+  userRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
   },
   userAvatar: {
     width: 50,
     height: 50,
     borderRadius: 25,
-    marginRight: 16,
+    marginRight: 12,
     borderWidth: 2,
     borderColor: "#fab12f",
   },
-  rankingInfo: {
+  userInfo: {
     flex: 1,
-  },
-  userHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 12,
   },
   userName: {
     color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  gymName: {
-    color: "#666",
-    fontSize: 12,
-    marginTop: 2,
-  },
-  totalScore: {
-    color: "#fab12f",
-    fontSize: 16,
-    fontWeight: "bold",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 5,
-  },
-  statsGrid: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  statBox: {
-    alignItems: "center",
-    flex: 1,
-  },
-  statValue: {
-    color: "#fab12f",
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: "bold",
     marginBottom: 2,
   },
-  statLabel: {
-    color: "#666",
-    fontSize: 11,
+  gymName: {
+    color: "#999",
+    fontSize: 13,
+    marginBottom: 2,
+  },
+  wodName: {
+    color: "#fab12f",
+    fontSize: 12,
+    fontWeight: "600",
+  },
+  scoreContainer: {
+    alignItems: "center",
+    paddingHorizontal: 12,
+    paddingVertical: 3,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  totalScore: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  ptsLabel: {
+    color: "#fab12f",
+    fontSize: 10,
+    marginTop: 2,
+  },
+  statsRow: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    backgroundColor: "#111",
+    borderRadius: 12,
+    paddingVertical: 5,
+  },
+  statItem: {
+    alignItems: "center",
+    gap: 4,
+  },
+  statValue: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "600",
   },
 });

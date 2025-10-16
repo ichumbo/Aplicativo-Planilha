@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const blockedItems = {
@@ -92,7 +92,7 @@ export default function BlockedDetailsScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const item = blockedItems[id as string];
-  const [activeTab, setActiveTab] = useState("prerequisites");
+  const [activeTab, setActiveTab] = useState("technique");
   const [isPremium] = useState(false); // Simula status premium do usuário
 
   if (!item) {
@@ -155,13 +155,13 @@ export default function BlockedDetailsScreen() {
             <View style={styles.headerStats}>
               <View style={styles.statChip}>
                 <View style={styles.statIconBg}>
-                  <Ionicons name="trophy" size={16} color="#000" />
+                  <Ionicons name="trophy" size={16} color="#fff" />
                 </View>
                 <Text style={styles.statText}>{item.level}</Text>
               </View>
               <View style={styles.statChip}>
                 <View style={styles.statIconBg}>
-                  <Ionicons name="fitness" size={16} color="#000" />
+                  <Ionicons name="fitness" size={16} color="#fff" />
                 </View>
                 <Text style={styles.statText}>{item.type}</Text>
               </View>
@@ -262,55 +262,45 @@ export default function BlockedDetailsScreen() {
         </View>
 
         {/* Abas */}
-        <View style={styles.section}>
-          <View style={styles.tabsContainer}>
-            <TouchableOpacity 
-              style={[styles.tab, activeTab === "prerequisites" && styles.activeTab]}
-              onPress={() => setActiveTab("prerequisites")}
-            >
-              <Text style={[styles.tabText, activeTab === "prerequisites" && styles.activeTabText]}>Pré-requisitos</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-              style={[styles.tab, activeTab === "benefits" && styles.activeTab]}
-              onPress={() => setActiveTab("benefits")}
-            >
-              <Text style={[styles.tabText, activeTab === "benefits" && styles.activeTabText]}>Benefícios</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-              style={[styles.tab, activeTab === "tips" && styles.activeTab]}
-              onPress={() => setActiveTab("tips")}
-            >
-              <Text style={[styles.tabText, activeTab === "tips" && styles.activeTabText]}>Dicas</Text>
-            </TouchableOpacity>
-          </View>
+         <View style={styles.section}>
+                  <View style={styles.tabsContainer}>
+                    <TouchableOpacity 
+                      style={[styles.tab, activeTab === "technique" && styles.activeTab]}
+                      onPress={() => setActiveTab("technique")}
+                    >
+                      <Text style={[styles.tabText, activeTab === "technique" && styles.activeTabText]}>Técnica</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                      style={[styles.tab, activeTab === "benefits" && styles.activeTab]}
+                      onPress={() => setActiveTab("benefits")}
+                    >
+                      <Text style={[styles.tabText, activeTab === "benefits" && styles.activeTabText]}>Benefícios</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                      style={[styles.tab, activeTab === "errors" && styles.activeTab]}
+                      onPress={() => setActiveTab("errors")}
+                    >
+                      <Text style={[styles.tabText, activeTab === "errors" && styles.activeTabText]}>Erros</Text>
+                    </TouchableOpacity>
+                  </View>
 
           <View style={styles.tabContentCard}>
-            {activeTab === "prerequisites" && (
+            {activeTab === "technique" && (
               <View style={styles.tabContent}>
                 {isPremium ? (
                   item.prerequisites.map((prereq, index) => (
                     <View key={index} style={styles.prereqItem}>
                       <View style={styles.prereqIcon}>
-                        <Ionicons name="checkmark-circle-outline" size={16} color="#fab12f" />
+                        <Ionicons name="play-circle-outline" size={16} color="#fab12f" />
                       </View>
                       <Text style={styles.prereqText}>{prereq}</Text>
                     </View>
                   ))
                 ) : (
-                  <>
-                    {item.prerequisites.slice(0, 2).map((prereq, index) => (
-                      <View key={index} style={styles.prereqItem}>
-                        <View style={styles.prereqIcon}>
-                          <Ionicons name="checkmark-circle-outline" size={16} color="#fab12f" />
-                        </View>
-                        <Text style={styles.prereqText}>{prereq}</Text>
-                      </View>
-                    ))}
-                    <View style={styles.blockedContent}>
-                      <Ionicons name="lock-closed" size={20} color="#666" />
-                      <Text style={styles.blockedText}>+{item.prerequisites.length - 2} pré-requisitos disponíveis no Premium</Text>
-                    </View>
-                  </>
+                  <View style={styles.blockedContent}>
+                    <Ionicons name="lock-closed" size={24} color="#666" />
+                    <Text style={styles.blockedText}>Técnicas detalhadas disponíveis apenas no Premium</Text>
+                  </View>
                 )}
               </View>
             )}
@@ -321,37 +311,27 @@ export default function BlockedDetailsScreen() {
                   item.benefits.map((benefit, index) => (
                     <View key={index} style={styles.benefitItem}>
                       <View style={styles.benefitIcon}>
-                        <Ionicons name="star" size={16} color="#fab12f" />
+                        <Ionicons name="checkmark-circle" size={16} color="#fab12f" />
                       </View>
                       <Text style={styles.benefitText}>{benefit}</Text>
                     </View>
                   ))
                 ) : (
-                  <>
-                    {item.benefits.slice(0, 1).map((benefit, index) => (
-                      <View key={index} style={styles.benefitItem}>
-                        <View style={styles.benefitIcon}>
-                          <Ionicons name="star" size={16} color="#fab12f" />
-                        </View>
-                        <Text style={styles.benefitText}>{benefit}</Text>
-                      </View>
-                    ))}
-                    <View style={styles.blockedContent}>
-                      <Ionicons name="lock-closed" size={20} color="#666" />
-                      <Text style={styles.blockedText}>+{item.benefits.length - 1} benefícios disponíveis no Premium</Text>
-                    </View>
-                  </>
+                  <View style={styles.blockedContent}>
+                    <Ionicons name="lock-closed" size={24} color="#666" />
+                    <Text style={styles.blockedText}>Benefícios detalhados disponíveis apenas no Premium</Text>
+                  </View>
                 )}
               </View>
             )}
 
-            {activeTab === "tips" && (
+            {activeTab === "errors" && (
               <View style={styles.tabContent}>
                 {isPremium ? (
                   item.unlockTips.map((tip, index) => (
                     <View key={index} style={styles.tipItem}>
                       <View style={styles.tipIcon}>
-                        <Ionicons name="bulb" size={16} color="#fab12f" />
+                        <Ionicons name="warning-outline" size={16} color="#fab12f" />
                       </View>
                       <Text style={styles.tipText}>{tip}</Text>
                     </View>
@@ -359,7 +339,7 @@ export default function BlockedDetailsScreen() {
                 ) : (
                   <View style={styles.blockedContent}>
                     <Ionicons name="lock-closed" size={20} color="#666" />
-                    <Text style={styles.blockedText}>Dicas exclusivas disponíveis no Premium</Text>
+                    <Text style={styles.blockedText}>Erros comuns e correções disponíveis no Premium</Text>
                   </View>
                 )}
               </View>
@@ -517,21 +497,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
   },
   statIconBg: {
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: "rgba(0,0,0,0.2)",
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
     justifyContent: "center",
     alignItems: "center",
   },
   statText: {
-    color: "#000",
+    color: "#fff",
     fontSize: 13,
     fontWeight: "700",
   },
@@ -757,14 +733,14 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     flex: 1,
   },
-  footer: {
+   footer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: "#1a1a1a",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    paddingVertical: 20,
+    paddingVertical: 30,
     paddingHorizontal: 20,
   },
   footerBtn: {

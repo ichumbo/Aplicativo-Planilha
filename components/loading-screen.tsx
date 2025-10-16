@@ -199,7 +199,7 @@ export default function LoadingScreen({ onFinish }: LoadingScreenProps) {
             ]}
           >
             <LinearGradient
-              colors={['#fab12f', '#ff6b35', '#fab12f']}
+              colors={['#fab12f', '#eb990dff', '#fab12f']}
               style={styles.gradientBorder}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   subtitle: {
-    color: '#8a8a8a',
+    color: '#fff',
     fontSize: 16,
     fontWeight: '400',
   },

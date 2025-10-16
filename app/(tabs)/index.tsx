@@ -2,7 +2,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Image, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 const workouts = [
@@ -356,20 +356,19 @@ export default function HomeScreen() {
                 style={[styles.movementCard, isLocked && styles.lockedCard]}
                 onPress={() => isLocked ? router.push(`/blocked-details?id=${item.id}`) : router.push(`/movement-details?id=${item.id}`)}
               >
-                <View style={styles.imageContainer}>
-                  <Image source={{ uri: item.image }} style={[styles.exerciseImage, isLocked && styles.lockedImage]} />
-                  <View style={styles.imageOverlay} />
-                  {isLocked && (
-                    <View style={styles.lockOverlay}>
-                      <Ionicons name="lock-closed" size={24} color="#fab12f" />
-                    </View>
-                  )}
-                </View>
+                <Image source={{ uri: item.image }} style={[styles.exerciseImage, isLocked && styles.lockedImage]} />
+                <View style={styles.imageOverlay} />
+                
+                {isLocked && (
+                  <View style={styles.lockOverlay}>
+                    <Ionicons name="lock-closed" size={24} color="#fab12f" />
+                  </View>
+                )}
                 
                 <View style={styles.cardContent}>
                   <View style={styles.cardHeader}>
                     <View style={styles.categoryContainer}>
-                      <Ionicons name="fitness" size={12} color="#fab12f" />
+                      <Ionicons name="fitness" size={12} color="#000" />
                       <Text style={styles.categoryBadge}>{item.type}</Text>
                     </View>
                     {isLocked ? (
@@ -402,7 +401,7 @@ export default function HomeScreen() {
                       </Text>
                     </View>
                     <View style={styles.durationContainer}>
-                      <Ionicons name="time-outline" size={12} color="#666" />
+                      <Ionicons name="time-outline" size={12} color="#fff" />
                       <Text style={[styles.durationText, isLocked && styles.lockedText]}>{item.duration}</Text>
                     </View>
                   </View>
@@ -725,21 +724,19 @@ const styles = StyleSheet.create({
   movementCard: {
     backgroundColor: '#111',
     borderRadius: 16,
+    overflow: 'hidden',
+    height: 165,
+    position: 'relative',
     borderWidth: 1,
     borderColor: '#222',
-    overflow: 'hidden',
-    flexDirection: 'row',
-    height: 165,
-  },
-  imageContainer: {
-    width: 140,
-    height: '100%',
-    position: 'relative',
   },
   exerciseImage: {
     width: '100%',
     height: '100%',
     backgroundColor: '#222',
+    position: 'absolute',
+    top: 0,
+    left: 0,
   },
   imageOverlay: {
     position: 'absolute',
@@ -747,7 +744,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    backgroundColor: 'rgba(0, 0, 0, 0.34)',
   },
   imageGradient: {
     position: 'absolute',
@@ -757,9 +754,14 @@ const styles = StyleSheet.create({
     width: 30,
   },
   cardContent: {
-    flex: 1,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     padding: 16,
     justifyContent: 'space-between',
+    zIndex: 2,
   },
   cardHeader: {
     flexDirection: 'row',
@@ -770,7 +772,7 @@ const styles = StyleSheet.create({
   cardBody: {
     flex: 1,
     justifyContent: 'flex-start',
-    gap: 6,
+    gap: 0,
   },
   difficultyBadge: {
     position: 'absolute',
@@ -808,7 +810,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   lockedCard: {
-    opacity: 0.7,
     borderColor: '#fab12f',
     borderWidth: 2,
   },
@@ -821,9 +822,10 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: '#faaf2f34',
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 1,
   },
   unlockButton: {
     width: 28,
@@ -845,13 +847,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#faaf2f46',
+    backgroundColor: '#fab12f',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
   },
   categoryBadge: {
-    color: '#fab12f',
+    color: '#000000ff',
     fontSize: 10,
     fontWeight: '700',
     textTransform: 'uppercase',
@@ -879,12 +881,12 @@ const styles = StyleSheet.create({
   },
   exerciseTitle: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 25,
     fontWeight: '700',
-    marginBottom: 4,
+    marginBottom: 8,
   },
   exerciseDesc: {
-    color: '#999',
+    color: '#fff',
     fontSize: 12,
     lineHeight: 16,
     flexShrink: 1,
@@ -901,7 +903,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   durationText: {
-    color: '#666',
+    color: '#fff',
     fontSize: 13,
     fontWeight: '500',
   },
