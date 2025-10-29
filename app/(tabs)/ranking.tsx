@@ -185,7 +185,7 @@ export default function RankingScreen() {
   const getRankingColor = (position: number) => {
     switch (position) {
       case 1:
-        return "#FFD700"; // Ouro
+        return "#fab12f"; // Ouro
       case 2:
         return "#C0C0C0"; // Prata
       case 3:
@@ -519,8 +519,13 @@ const styles = StyleSheet.create({
   beautifulSeparator: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 20,
     paddingHorizontal: 10,
+    marginTop: 10,
+    marginBottom: 15,
+    backgroundColor: "#1a1a1a",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#333",
   },
   separatorDot: {
     width: 4,
@@ -547,6 +552,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     marginRight: 2,
     minWidth: 50,
+    marginBottom: 25,
   },
   dayLabel: {
     color: "#a6a2ad",

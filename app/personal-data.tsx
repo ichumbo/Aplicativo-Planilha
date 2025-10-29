@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
     marginLeft: 4,
   },
   inputWrapper: {
-    backgroundColor: '#1c1c1c',
+    backgroundColor: '#161616ff',
     borderRadius: 16,
     flexDirection: 'row',
     alignItems: 'center',
@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
   },
   selectInput: {
-    backgroundColor: '#1c1c1c',
+    backgroundColor: '#161616ff',
     borderRadius: 16,
     paddingHorizontal: 16,
     minHeight: 56,

@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   faqItem: {
-    backgroundColor: '#1c1c1c',
+    backgroundColor: '#161616ff',
     borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: 16,
@@ -331,7 +331,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   contactItem: {
-    backgroundColor: '#1c1c1c',
+    backgroundColor: '#161616ff',
     borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: 16,
@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   resourceItem: {
-    backgroundColor: '#1c1c1c',
+    backgroundColor: '#161616ff',
     borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: 16,

@@ -463,7 +463,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   workoutSelector: {
-    backgroundColor: '#1c1c1c',
+    backgroundColor: '#161616ff',
     borderRadius: 14,
     paddingHorizontal: 20,
     paddingVertical: 10,
@@ -493,7 +493,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   workoutModalContent: {
-    backgroundColor: '#1c1c1c',
+    backgroundColor: '#161616ff',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 24,
@@ -594,7 +594,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalContent: {
-    backgroundColor: '#1c1c1c',
+    backgroundColor: '#161616ff',
     borderRadius: 20,
     padding: 24,
     width: '80%',

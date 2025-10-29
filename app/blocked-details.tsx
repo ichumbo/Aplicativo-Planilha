@@ -209,25 +209,45 @@ export default function BlockedDetailsScreen() {
         {/* Card Premium */}
         {!isPremium && (
           <View style={styles.section}>
-            <View style={styles.premiumCard}>
+            <TouchableOpacity style={styles.premiumCard} activeOpacity={0.9}>
               <LinearGradient
-                colors={["#fab12f", "#ff8c00"]}
+                colors={["#fab12f",  "#fab12f"]}
+                locations={[0, 0.5, 1]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
                 style={styles.premiumGradient}
               >
+                <View style={styles.premiumShine} />
                 <View style={styles.premiumContent}>
-                  <View style={styles.premiumIcon}>
-                    <Ionicons name="diamond" size={32} color="#fab12f" />
+                  <View style={styles.premiumIconContainer}>
+                    <View style={styles.premiumIcon}>
+                      <Ionicons name="diamond" size={28} color="#fab12f" />
+                    </View>
+                    <View style={styles.premiumIconGlow} />
                   </View>
-                  <View style={styles.premiumText}>
+                  <View style={styles.premiumTextContainer}>
                     <Text style={styles.premiumTitle}>CrossPlan Premium</Text>
-                    <Text style={styles.premiumSubtitle}>Desbloqueie conteúdo completo</Text>
+                    <Text style={styles.premiumSubtitle}>Desbloqueie todo o conteúdo</Text>
+                    <View style={styles.premiumFeatures}>
+                      <View style={styles.premiumFeature}>
+                        <Ionicons name="checkmark-circle" size={14} color="rgba(0,0,0,0.8)" />
+                        <Text style={styles.premiumFeatureText}>Técnicas avançadas</Text>
+                      </View>
+                      <View style={styles.premiumFeature}>
+                        <Ionicons name="checkmark-circle" size={14} color="rgba(0,0,0,0.8)" />
+                        <Text style={styles.premiumFeatureText}>Sem anúncios</Text>
+                      </View>
+                    </View>
                   </View>
-                  <TouchableOpacity style={styles.premiumButton}>
-                    <Text style={styles.premiumButtonText}>Assinar</Text>
-                  </TouchableOpacity>
+                  <View style={styles.premiumButtonContainer}>
+                    <View style={styles.premiumButton}>
+                      <Text style={styles.premiumButtonText}>Assinar</Text>
+                      <Ionicons name="arrow-forward" size={16} color="#fab12f" />
+                    </View>
+                  </View>
                 </View>
               </LinearGradient>
-            </View>
+            </TouchableOpacity>
           </View>
         )}
 
@@ -785,48 +805,114 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   premiumCard: {
-    borderRadius: 16,
+    borderRadius: 20,
     overflow: "hidden",
     marginBottom: 16,
+    shadowColor: "#fab12f",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    elevation: 8,
   },
   premiumGradient: {
-    padding: 20,
+    padding: 24,
+    position: "relative",
+  },
+  premiumShine: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 2,
   },
   premiumContent: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     gap: 16,
   },
-  premiumIcon: {
-    backgroundColor: "#000",
-    borderRadius: 15,
-    width: 65,
-    height: 65,
-    justifyContent: 'center',
-    alignItems: 'center',
+  premiumIconContainer: {
+    position: "relative",
   },
-  premiumText: {
+  premiumIcon: {
+    backgroundColor: "rgba(0,0,0,0.9)",
+    borderRadius: 18,
+    width: 60,
+    height: 60,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "rgba(0,0,0,0.2)",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+  },
+  premiumIconGlow: {
+    position: "absolute",
+    top: -4,
+    left: -4,
+    right: -4,
+    bottom: -4,
+    borderRadius: 22,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.3)",
+  },
+  premiumTextContainer: {
     flex: 1,
+    gap: 4,
   },
   premiumTitle: {
     color: "#000",
-    fontSize: 18,
-    fontWeight: "700",
+    fontSize: 20,
+    fontWeight: "800",
+    letterSpacing: -0.5,
   },
   premiumSubtitle: {
-    color: "rgba(0,0,0,0.7)",
+    color: "rgba(0,0,0,0.8)",
     fontSize: 14,
-    marginTop: 2,
+    fontWeight: "500",
+    marginBottom: 8,
+  },
+  premiumFeatures: {
+    gap: 4,
+  },
+  premiumFeature: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  premiumFeatureText: {
+    color: "rgba(0,0,0,0.7)",
+    fontSize: 12,
+    fontWeight: "500",
+  },
+  premiumButtonContainer: {
+    alignItems: "center",
+    gap: 6,
   },
   premiumButton: {
-    backgroundColor: "#000",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 10,
+    backgroundColor: "rgba(0,0,0,0.9)",
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.2)",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
   },
   premiumButtonText: {
     color: "#fab12f",
     fontSize: 14,
+    fontWeight: "700",
+  },
+  premiumPrice: {
+    color: "rgba(0,0,0,0.8)",
+    fontSize: 11,
     fontWeight: "600",
   },
   blockedContent: {

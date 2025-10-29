@@ -307,7 +307,7 @@ export default function ExerciseDetailScreen() {
             onPress={goToNextExercise}
           >
             <Text style={styles.navButtonText}>Próximo</Text>
-            <Ionicons name="chevron-forward" size={20} color="#000" />
+            <Ionicons name="chevron-forward" size={20} color="#fff" />
           </TouchableOpacity>
         ) : (
           <TouchableOpacity 
@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#1c1c1c",
+    backgroundColor: "#161616ff",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -381,7 +381,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     marginBottom: 20,
     paddingVertical: 5,
-    backgroundColor: "#1c1c1c",
+    backgroundColor: "#161616ff",
     borderRadius: 15,
   },
   statsText: {
@@ -395,7 +395,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   exerciseCard: {
-    backgroundColor: "#1c1c1c",
+    backgroundColor: "#161616ff",
     borderRadius: 15,
     padding: 16,
     marginBottom: 20,
@@ -476,7 +476,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 12,
     paddingHorizontal: 16,
-    backgroundColor: "#1c1c1c",
+    backgroundColor: "#161616ff",
     borderRadius: 8,
     marginBottom: 8,
   },
@@ -508,7 +508,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 12,
     paddingHorizontal: 16,
-    backgroundColor: "#1c1c1c",
+    backgroundColor: "#161616ff",
     borderRadius: 8,
     marginBottom: 8,
   },
@@ -553,7 +553,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: "#1c1c1c",
+    backgroundColor: "#161616ff",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -577,7 +577,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-    backgroundColor: "#1c1c1c",
+    backgroundColor: "#161616ff",
     padding: 16,
     borderRadius: 12,
     marginBottom: 20,
@@ -601,10 +601,10 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     backgroundColor: "#0f0f0fff",
     borderTopWidth: 1,
-    borderTopColor: "#1c1c1c",
+    borderTopColor: "#161616ff",
   },
   noteInputContainer: {
-    backgroundColor: "#1c1c1c",
+    backgroundColor: "#161616ff",
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
@@ -629,7 +629,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   prevButton: {
-    backgroundColor: "#1c1c1c",
+    backgroundColor: "#161616ff",
   },
   nextButton: {
     backgroundColor: "#fbbf24",

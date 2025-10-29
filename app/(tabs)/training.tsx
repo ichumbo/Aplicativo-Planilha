@@ -137,7 +137,7 @@ export default function TrainingScreen() {
               >
                 <Ionicons name="list-outline" size={20} color="#fab12f" />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => router.push("/profile")}>
                 <Image
                   source={{ uri: "https://i.pravatar.cc/150?img=12" }}
                   style={styles.avatar}

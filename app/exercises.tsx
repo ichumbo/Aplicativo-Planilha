@@ -2,16 +2,16 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import {
-  Image,
-  Linking,
-  Modal,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Image,
+    Linking,
+    Modal,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 
 const initialExercises = [
@@ -651,7 +651,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1c1c1c',
+    backgroundColor: '#161616ff',
     marginHorizontal: 20,
     marginBottom: 20,
     paddingHorizontal: 15,
@@ -673,7 +673,7 @@ const styles = StyleSheet.create({
   exerciseCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1c1c1c',
+    backgroundColor: '#161616ff',
     padding: 12,
     marginBottom: 12,
     borderRadius: 12,
@@ -714,7 +714,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   createButton: {
-    backgroundColor: '#1c1c1c',
+    backgroundColor: '#161616ff',
     borderRadius: 12,
     padding: 16,
     marginHorizontal: 20,
@@ -751,7 +751,7 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   infoModalContent: {
-    backgroundColor: "#1c1c1c",
+    backgroundColor: "#161616ff",
     borderRadius: 20,
     width: '100%',
     maxHeight: '85%',
@@ -841,7 +841,7 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   createModalContent: {
-    backgroundColor: "#1c1c1c",
+    backgroundColor: "#161616ff",
     borderRadius: 20,
     width: '100%',
     maxHeight: '85%',
@@ -913,7 +913,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   videoPlaceholder: {
-    backgroundColor: '#1c1c1c',
+    backgroundColor: '#161616ff',
     borderRadius: 16,
     height: 180,
     position: 'relative',
@@ -973,7 +973,7 @@ const styles = StyleSheet.create({
   },
 
   createInput: {
-    backgroundColor: '#1c1c1c',
+    backgroundColor: '#161616ff',
     borderRadius: 8,
     padding: 10,
     color: '#fff',
@@ -1042,7 +1042,7 @@ const styles = StyleSheet.create({
     zIndex: 1000,
   },
   dropdownButton: {
-    backgroundColor: '#1c1c1c',
+    backgroundColor: '#161616ff',
     borderRadius: 8,
     padding: 12,
     borderWidth: 1,
@@ -1060,7 +1060,7 @@ const styles = StyleSheet.create({
     top: '100%',
     left: 0,
     right: 0,
-    backgroundColor: '#1c1c1c',
+    backgroundColor: '#161616ff',
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#333',
@@ -1107,7 +1107,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#1c1c1c',
+    backgroundColor: '#161616ff',
     borderRadius: 8,
     padding: 12,
     borderWidth: 1,

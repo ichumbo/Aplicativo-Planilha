@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Animated, Switch } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { useEffect, useRef, useState } from 'react';
+import { Animated, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 
 export default function Notifications() {
   const router = useRouter();
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   notificationItem: {
-    backgroundColor: '#1c1c1c',
+    backgroundColor: '#161616ff',
     borderRadius: 16,
     padding: 20,
     marginBottom: 12,

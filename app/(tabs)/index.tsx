@@ -190,10 +190,14 @@ const workouts = [
 
 export default function HomeScreen() {
   const router = useRouter();
+  const [treinoConfirmado, setTreinoConfirmado] = useState(false);
   const [filtroAtivo, setFiltroAtivo] = useState("Todos Movimentos");
   const [textoPesquisa, setTextoPesquisa] = useState("");
   
   const filtros = ["Todos Movimentos", "Força", "Cardio", "Flexibilidade", "HIIT", "Iniciante", "Intermediário", "Avançado"];
+  
+  const diasComCheck = ['Seg', 'Ter', 'Hoje'];
+  const progressoSemanal = (diasComCheck.length / 7) * 100;
   
   let workoutsFiltrados = filtroAtivo === "Todos Movimentos" 
     ? workouts 
@@ -243,9 +247,9 @@ export default function HomeScreen() {
             <View style={styles.progressContent}>
               <View style={styles.progressLeft}>
                 <Text style={styles.progressTitle}>Progresso CrossFit</Text>
-                <Text style={styles.progressSubtitle}>Meta mensal</Text>
+                <Text style={styles.progressSubtitle}>Meta Semanal</Text>
                 <View style={styles.progressBarContainer}>
-                  <View style={styles.progressBarFill} />
+                  <View style={[styles.progressBarFill, { width: `${progressoSemanal}%` }]} />
                 </View>
               </View>
             </View>
@@ -255,6 +259,64 @@ export default function HomeScreen() {
             style={styles.personImage}
             resizeMode="contain"
           />
+        </View>
+
+        {/* Check-in Card */}
+        <View style={styles.checkinCardContainer}>
+          <View style={styles.weekContainer}>
+            {['Seg', 'Ter', 'Hoje', 'Qui', 'Sex', 'Sáb', 'Dom'].map((day, i) => (
+              <TouchableOpacity
+                key={i}
+                style={[
+                  styles.dayButton,
+                  day === 'Hoje' && styles.dayButtonToday,
+                  ['Seg', 'Ter', 'Hoje'].includes(day) && styles.dayButtonChecked,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.dayText,
+                    day === 'Hoje' && styles.dayTextToday,
+                    ['Seg', 'Ter', 'Hoje'].includes(day) && styles.dayTextChecked,
+                  ]}
+                >
+                  {day}
+                </Text>
+                {['Seg', 'Ter', 'Hoje'].includes(day) && (
+                  <Ionicons name="checkmark" size={14} color="#fab12f" style={styles.checkIcon} />
+                )}
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <View style={styles.checkinContainer}>
+            <View style={styles.checkinHeader}>
+              <Text style={styles.checkinTitle}>Confirme seu treino de hoje</Text>
+            </View>
+            <Text style={styles.checkinSubtitle}>
+              Você pode fazer um novo check-in amanhã
+            </Text>
+
+            <TouchableOpacity 
+              style={[styles.gymCard, treinoConfirmado && styles.gymCardConfirmed]}
+              onPress={() => setTreinoConfirmado(true)}
+              disabled={treinoConfirmado}
+            >
+              <Ionicons 
+                name={treinoConfirmado ? "checkmark-circle" : "add-circle-outline"} 
+                size={22} 
+                color={treinoConfirmado ? "#fab12f" : "#fab12f"} 
+              />
+              <View>
+                <Text style={styles.gymName}>
+                  {treinoConfirmado ? "Treino confirmado!" : "Confirmar treino"}
+                </Text>
+                <Text style={styles.gymSubtitle}>
+                  {treinoConfirmado ? "Parabens" : "Toque para confirmar"}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Botão Planilha */}
@@ -538,7 +600,6 @@ const styles = StyleSheet.create({
   },
   progressBarFill: {
     height: 6,
-    width: '59%',
     backgroundColor: '#000',
     borderRadius: 4,
   },
@@ -554,7 +615,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#111111ff",
+    backgroundColor: "#161616ff",
     padding: 15,
     borderRadius: 16,
     marginTop: 15,
@@ -918,7 +979,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
   },
-
   bottomNav: {
     position: "absolute",
     bottom: 0,
@@ -941,6 +1001,90 @@ const styles = StyleSheet.create({
   },
   navTextActive: {
     color: "#fab12f",
+    fontSize: 12,
+  },
+  checkinCardContainer: {
+    marginTop: 10,
+    gap: 12,
+  },
+  weekContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#fab12f',
+    padding: 10,
+    borderRadius: 16,
+    gap: 4,
+    color: '#000',
+  },
+  dayButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 4,
+    borderRadius: 10,
+    minWidth: 45,
+    flex: 1,
+  },
+  dayButtonChecked: {
+    backgroundColor: '#0f0f0fff',
+  },
+  dayButtonToday: {
+    backgroundColor: '#fab12f',
+  },
+  dayText: {
+    color: '#000',
+    fontWeight: '700',
+    
+  },
+  dayTextChecked: {
+    color: '#fab12f',
+  },
+  dayTextToday: {
+    color: '#fff',
+  },
+  checkIcon: {
+    marginTop: 2,
+  },
+  checkinContainer: {
+    backgroundColor: '#161616ff',
+    padding: 15,
+    borderRadius: 16,
+  },
+  checkinHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 6,
+  },
+  checkinTitle: {
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 16,
+  },
+  checkinSubtitle: {
+    color: '#888',
+    fontSize: 14,
+    marginBottom: 12,
+  },
+  gymCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#0f0f0fff',
+    borderRadius: 12,
+    padding: 12,
+    gap: 10,
+  },
+  gymCardConfirmed: {
+    borderWidth: 2,
+    borderColor: '#fab12f',
+  },
+  gymName: {
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 14,
+  },
+  gymSubtitle: {
+    color: '#888',
     fontSize: 12,
   },
 });

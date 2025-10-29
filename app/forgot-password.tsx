@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import {
-  Animated,
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
+    Animated,
+    KeyboardAvoidingView,
+    Platform,
+    SafeAreaView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
 } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
@@ -356,7 +356,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     minHeight: 56,
-    backgroundColor: '#1c1c1c',
+    backgroundColor: '#161616ff',
   },
   inputFocused: {
     borderColor: '#fab12f',

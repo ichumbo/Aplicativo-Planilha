@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react';
 import {
-  Animated,
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
+    Animated,
+    SafeAreaView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
 } from 'react-native';
 
 import LoadingScreen from '@/components/loading-screen';
@@ -141,10 +139,6 @@ export default function LoginScreen() {
         <View style={styles.wave} />
         <View style={styles.triangle} />
       </Animated.View>
-      <KeyboardAvoidingView 
-        style={styles.keyboardView}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      >
         <Animated.View style={[
           styles.content,
           {
@@ -201,9 +195,10 @@ export default function LoginScreen() {
                   onBlur={() => setEmailFocused(false)}
                   keyboardType="email-address"
                   autoCapitalize="none"
+                  blurOnSubmit={false}
+                  returnKeyType="next"
                 />
               </View>
-              
             </View>
 
             <View style={styles.inputContainer}>
@@ -218,6 +213,8 @@ export default function LoginScreen() {
                   onChangeText={setSenha}
                   onFocus={() => setSenhaFocused(true)}
                   onBlur={() => setSenhaFocused(false)}
+                  blurOnSubmit={false}
+                  returnKeyType="done"
                 />
                 <TouchableOpacity 
                   style={styles.eyeButton}
@@ -230,7 +227,9 @@ export default function LoginScreen() {
                   />
                 </TouchableOpacity>
               </View>
-               <TouchableOpacity 
+            </View>
+
+            <TouchableOpacity 
               style={styles.checkboxContainer}
               onPress={() => setTemPersonal(!temPersonal)}
             >
@@ -255,11 +254,12 @@ export default function LoginScreen() {
                     onFocus={() => setCodigoPersonalFocused(true)}
                     onBlur={() => setCodigoPersonalFocused(false)}
                     autoCapitalize="characters"
+                    blurOnSubmit={false}
+                    returnKeyType="done"
                   />
                 </View>
               </View>
             )}
-            </View>
 
             <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
               <TouchableOpacity 
@@ -282,7 +282,6 @@ export default function LoginScreen() {
 
           </Animated.View>
         </Animated.View>
-      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -352,9 +351,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#fab12f',
     opacity: 0.04,
   },
-  keyboardView: {
-    flex: 1,
-  },
+
   logo: {
     width: 100,
     height: 40,
@@ -404,7 +401,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     minHeight: 56,
-    backgroundColor: '#1c1c1c',
+    backgroundColor: '#161616ff',
   },
   inputFocused: {
     borderColor: '#fab12f',

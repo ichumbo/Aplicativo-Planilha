@@ -63,7 +63,7 @@ export default function ProfileScreen() {
             imageStyle={styles.headerBackgroundImage}
           >
             <LinearGradient
-              colors={['rgba(250, 177, 47, 0.8)', 'rgba(255, 140, 0, 0.8)', 'rgba(250, 177, 47, 0.8)']}
+              colors={['#faaf2f7a', '#f89d0069', '#faaf2f7a']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.headerGradient}
@@ -81,7 +81,7 @@ export default function ProfileScreen() {
                 <View style={styles.userInfo}>
                   <Text style={styles.userName}>João Silva</Text>
                   <View style={styles.levelContainer}>
-                    <Ionicons name="star" size={14} color="#000" />
+                    <Ionicons name="star" size={14} color="#fff" />
                     <Text style={styles.userLevel}>Atleta Intermediário</Text>
                   </View>
                 </View>
@@ -94,7 +94,7 @@ export default function ProfileScreen() {
           <View style={styles.statsGrid}>
             <TouchableOpacity style={[styles.statCard, styles.streakCard]} activeOpacity={0.8}>
               <LinearGradient
-                colors={['rgba(250, 177, 47, 0.8)', 'rgba(255, 140, 0, 0.8)', 'rgba(250, 177, 47, 0.8)']}
+                colors={['#fab12f', '#f89d00ff', '#fab12f']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.streakGradient}
@@ -107,13 +107,13 @@ export default function ProfileScreen() {
                           opacity: flameAnim.interpolate({ inputRange: [0, 1], outputRange: [0.8, 1] }),
                           transform: [{ translateY: flameAnim.interpolate({ inputRange: [0, 1], outputRange: [0, -2] }) }]
                         }]}>
-                          <Ionicons name="flame" size={32} color="#000" />
+                          <Ionicons name="flame" size={32} color="#fff" />
                         </Animated.View>
                         {flameLevel === 'legendary' && (
                           <Animated.View style={[styles.sparkles, { opacity: sparkleAnim }]}>
-                            <Ionicons name="sparkles" size={18} color="#000" style={styles.sparkle1} />
-                            <Ionicons name="sparkles" size={14} color="#000" style={styles.sparkle2} />
-                            <Ionicons name="sparkles" size={12} color="#000" style={styles.sparkle3} />
+                            <Ionicons name="sparkles" size={18} color="#fff" style={styles.sparkle1} />
+                            <Ionicons name="sparkles" size={14} color="#fff" style={styles.sparkle2} />
+                            <Ionicons name="sparkles" size={12} color="#fff" style={styles.sparkle3} />
                           </Animated.View>
                         )}
                       </View>
@@ -176,6 +176,8 @@ export default function ProfileScreen() {
         </View>
 
         <View style={styles.menuSection}>
+          <Text style={styles.sectionTitle}>Conta</Text>
+          
           <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/personal-data')}>
             <View style={styles.menuLeft}>
               <View style={styles.menuIconContainer}>
@@ -312,7 +314,7 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 28,
     fontWeight: '900',
-    color: '#000',
+    color: '#fff',
     marginBottom: 8,
     textShadowColor: 'rgba(0,0,0,0.1)',
     textShadowOffset: { width: 0, height: 1 },
@@ -326,7 +328,7 @@ const styles = StyleSheet.create({
   userLevel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#000',
+    color: '#fff',
   },
   statsContainer: {
     paddingHorizontal: 20,
@@ -373,11 +375,11 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: 'rgba(0,0,0,0.15)',
+    backgroundColor: '#ffffff3b',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: 'rgba(0,0,0,0.2)',
+    borderColor: '#fff',
   },
   flameIcon: {
     justifyContent: 'center',
@@ -416,20 +418,20 @@ const styles = StyleSheet.create({
   streakNumber: {
     fontSize: 40,
     fontWeight: '900',
-    color: '#000',
+    color: '#fff',
     lineHeight: 44,
     marginRight: 8,
   },
   streakDays: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#000',
+    color: '#fff',
     opacity: 0.7,
   },
   streakLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#000',
+    color: '#fff',
     opacity: 0.8,
   },
   streakBadge: {
@@ -444,7 +446,7 @@ const styles = StyleSheet.create({
   streakLevel: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#000',
+    color: '#fff',
     opacity: 0.9,
   },
   progressSection: {
@@ -459,23 +461,23 @@ const styles = StyleSheet.create({
   progressText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#000',
+    color: '#fff',
     opacity: 0.8,
   },
   progressPercent: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#000',
+    color: '#fff',
   },
   progressBar: {
     height: 6,
-    backgroundColor: 'rgba(0,0,0,0.2)',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderRadius: 3,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#000',
+    backgroundColor: '#fff',
     borderRadius: 3,
   },
   statContent: {
@@ -503,6 +505,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#1a1a1a',
     borderRadius: 16,
     overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: '#333',
   },
   sectionTitle: {
     fontSize: 16,

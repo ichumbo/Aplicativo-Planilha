@@ -108,6 +108,17 @@ export default function TabsContainer() {
         }}
       />
 
+      {/* ⚙️ Admin */}
+      <Tabs.Screen
+        name="admin"
+        options={{
+          title: 'Admin',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? 'settings' : 'settings-outline'} size={theme.sizes.iconSize} color={color} />
+          ),
+        }}
+      />
+
     </Tabs>
   );
 }

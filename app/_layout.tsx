@@ -10,6 +10,9 @@ export default function RootLayout() {
       <Stack.Screen name="notifications" options={{ headerShown: false }} />
       <Stack.Screen name="movement-details" options={{ headerShown: false }} />
       <Stack.Screen name="training-details" options={{ headerShown: false }} />
+      <Stack.Screen name="add-training" options={{ headerShown: false }} />
+      <Stack.Screen name="add-course" options={{ headerShown: false }} />
+      <Stack.Screen name="manage-users" options={{ headerShown: false }} />
       <Stack.Screen name="forgot-password" options={{ headerShown: false }} />
       <Stack.Screen name="blocked-details" options={{ headerShown: false }} />
       <Stack.Screen name="help-support" options={{ headerShown: false }} />
